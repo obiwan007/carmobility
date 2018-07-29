@@ -1,0 +1,7 @@
+{
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#005500"
+  },
+  "codemetrics.basics.EnabledForTSX": false,
+  "typescript.tsdk": "node_modules\\typescript\\lib"
+}

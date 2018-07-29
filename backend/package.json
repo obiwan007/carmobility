@@ -1,0 +1,104 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "The backend (API).",
+  "private": true,
+  "scripts": {
+    "prestart": "npm run build",
+    "preserve": "npm run build",
+    "prebuild": "npm run code:all",
+    "build": "tsc",
+    "prestartdebug": "tsc",
+    "serve": "concurrently \"npm run watch:ts\" \"npm run nodemon\"",
+    "nodemon": "nodemon --delay 5 --inspect=localhost:9229 dist/app --watch dist",
+    "start": "node dist/app.js",
+    "watch:ts": "tsc -w",
+    "tsc": "tsc",
+    "test": "./node_modules/.bin/jest --coverage false --watchAll",
+    "code:lint": "tslint --fix -c ./tslint.json -p ./tsconfig.json ./src/**/*.ts",
+    "code:all": "npm run code:lint",
+    "ci:test:unit": "./node_modules/.bin/jest --ci --testResultsProcessor=\"jest-junit\""
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "pre-commit": [
+    "code:all"
+  ],
+  "engines": {
+    "node": "8.4.0"
+  },
+  "author": "Markus Miertschink",
+  "license": "MIT",
+  "jest": {
+    "testEnvironment": "node",
+    "setupFiles": [],
+    "transform": {
+      "^.+\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testResultsProcessor": "./node_modules/jest-junit",
+    "testRegex": "/tests/.*[t|T]ests?\\.ts",
+    "verbose": true,
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!src/schema/**",
+      "!**/node_modules/**",
+      "!**/vendor/**"
+    ],
+    "coverageReporters": [
+      "cobertura",
+      "lcov",
+      "text"
+    ],
+    "coverageDirectory": "./testresults/coverage",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ]
+  },
+  "jest-junit": {
+    "suiteName": "backend unit tests",
+    "output": "./testresults/unit-junit-testresults.xml",
+    "classNameTemplate": "{classname} {title}",
+    "titleTemplate": "{title}",
+    "ancestorSeparator": " ",
+    "usePathForSuiteName": "false"
+  },
+  "dependencies": {
+    "@types/async": "^2.0.40",
+    "@types/cors": "^2.8.3",
+    "@types/express": "^4.0.36",
+    "@types/express-session": "^1.15.6",
+    "@types/jest": "^22.2.3",
+    "@types/lodash": "^4.14.85",
+    "@types/node": "^8.0.51",
+    "@types/superagent": "3.5.8",
+    "async": "^1.4.2",
+    "body-parser": "^1.18.2",
+    "concurrently": "3.5.1",
+    "cookie": "^0.3.1",
+    "cors": "2.8.4",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "jest": "22.4.3",
+    "jest-junit": "3.7.0",
+    "lodash": "4.17.10",
+    "rxjs": "6.1.0",
+    "rxjs-compat": "^6.1.0",
+    "superagent": "3.8.2",
+    "ts-jest": "^22.4.6",
+    "ts-node": "4.1.0",
+    "tslint": "^5.10.0",
+    "typescript": "2.9.1",
+    "watch": "^1.0.2"
+  },
+  "devDependencies": {
+    "@types/cookie": "^0.3.1",
+    "nodemon": "^1.17.5"
+  }
+}
