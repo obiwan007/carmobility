@@ -30,6 +30,10 @@ describe('CarService Tests', () => {
     });
 
     // tslint:disable-next-line:no-empty
-    it('set car location car', () => {
+    it('set car location', () => {
+    });
+
+    // tslint:disable-next-line:no-empty
+    it('set new location and check if estimated milage has been recalculated accordingly', () => {
     });
 });

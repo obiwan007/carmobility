@@ -5,7 +5,7 @@ import { Demand } from '../src/models/demands';
 import { User } from '../src/models/user';
 
 /**
- * Unittestes based on requirements of the management service document
+ * Unittests based on requirements of the management service document
  */
 describe('SchedulingService Tests', () => {
 
@@ -14,8 +14,14 @@ describe('SchedulingService Tests', () => {
     });
 
     // tslint:disable-next-line:no-empty
-    it('set demand state', () => {
+    it('set demand state to requested', () => {
     });
 
     // tslint:disable-next-line:no-empty
+    it('set demand state to fulfilled', () => {
+    });
+
+    // tslint:disable-next-line:no-empty
+    it('set demand state to inProgress', () => {
+    });
 });
