@@ -1,4 +1,4 @@
-**CarMoblility Service**
+**CarMobility Service**
 
 This repositiory contains a simple nodejs based typescript backend application for scheduling a car sharing system.
 
