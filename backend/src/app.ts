@@ -6,9 +6,8 @@ import * as session from 'express-session';
 import { createServer } from 'http';
 import * as path from 'path';
 
-import {bookingService } from './services/bookingService';
-import {carService } from './services/carService';
-import {userService } from './services/userService';
+import { registry } from './services/registry';
+import { StorageService } from './services/storage';
 
 /**
  * Main entrypoint to the application
@@ -30,29 +29,30 @@ export class MainService {
      * todo: extract that into controller classes
      */
     private buildAPI() {
+        registry.init(new StorageService());
         this.app.get('/cars', (req, res) => {
-            const cars = carService.cars();
-            res.json({data: cars});
+            const cars = registry.getCarService().cars();
+            res.json({ data: cars });
         });
         this.app.post('/cars', (req, res) => {
-            carService.addCar(req.body);
+            registry.getCarService().addCar(req.body);
             res.sendStatus(200);
         });
         this.app.put('/cars', (req, res) => {
-            carService.updateCar(req.body);
+            registry.getCarService().updateCar(req.body);
             res.sendStatus(200);
         });
         this.app.delete('/cars', (req, res) => {
-            carService.removeCar(req.body);
+            registry.getCarService().removeCar(req.body);
             res.sendStatus(200);
         });
         this.app.get('/users', (req, res) => {
-            const users = userService.users();
-            res.json({data: users});
+            const users = registry.getUserService().users();
+            res.json({ data: users });
         });
         this.app.get('/bookings', (req, res) => {
-            const bookings = bookingService.demands();
-            res.json({data: bookings});
+            const bookings = registry.getBookingService().demands();
+            res.json({ data: bookings });
         });
     }
 

@@ -1,9 +1,3 @@
-import { bookingService } from '../src/services/bookingService';
-import { userService } from '../src/services/userService';
-
-import { Demand } from '../src/models/demands';
-import { User } from '../src/models/user';
-
 /**
  * Unittestes based on requirements of the management service document
  */

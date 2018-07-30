@@ -2,7 +2,20 @@ import { Car } from '../models/car';
 import { Demand } from '../models/demands';
 import { User } from '../models/user';
 
-export class Storage {
+/**
+ * Storage inteface class
+ */
+export interface IStorageService {
+    getCars(): Car[];
+    getUser(): User[];
+    getDemands(): Demand[];
+    getNextId(): string;
+}
+
+/**
+ * Basic In-Memory storage implementation
+ */
+export class StorageService implements IStorageService {
     private id: number = 0;
     private cars: Car[] = [];
     private users: User[] = [];
@@ -20,5 +33,3 @@ export class Storage {
         return (this.id++).toString();
     }
 }
-
-export const StorageInstance = new Storage();

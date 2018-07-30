@@ -1,19 +1,29 @@
 import * as _ from 'lodash';
 
-import { Storage, StorageInstance } from './storage';
+import { IStorageService } from './storage';
 
 import { Car } from '../models/car';
 import { Demand } from '../models/demands';
 
-import { carService } from './carService';
+import { registry } from './registry';
 
-import { bookingService } from './bookingService';
-
+/**
+ * SchedulingService is aresponsible for handling the disposition of cars based on given demands.
+ */
 export class SchedulingService {
-    public storage: Storage = StorageInstance;
+    public storage: IStorageService;
+
+    constructor(storage: IStorageService) {
+        this.storage = storage;
+    }
+
+    /**
+     * Find a car in the car pool to be able to fulfill the given demand.
+     * @param demand
+     */
     public findCarForDemand(demand: Demand): Car | null {
         let foundCar: Car | null = null;
-        carService.cars().forEach(car => {
+        registry.getCarService().cars().forEach(car => {
             if (demand.requestedFeatures.infotainment.hasAppleCar && car.infotainment.hasAppleCar
                 && demand.requestedFeatures.infotainment.hasGoogleAuto && car.infotainment.hasGoogleAuto
                 && demand.requestedFeatures.infotainment.hasNavigation && car.infotainment.hasNavigation
@@ -34,12 +44,10 @@ export class SchedulingService {
     }
 
     /**
-     *
-     * @param car Check if the car is booked in another Demand and the Demand is in Progress
+     * Check if the car is booked in another Demand and the Demand is in Progress
+     * @param car
      */
     public checkForCarIsCurrentlyBusy(car: Car): boolean {
         return false;
     }
-
 }
-export const schedulingService = new SchedulingService();

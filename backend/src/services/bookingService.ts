@@ -1,16 +1,27 @@
 import * as _ from 'lodash';
 
-import { Storage, StorageInstance } from './storage';
+import { IStorageService } from './storage';
 
 import { Demand } from '../models/demands';
 import { User } from '../models/user';
 
-import { userService } from './userService';
+import { registry } from './registry';
 
+/**
+ * Bookingservice class for handling all demands for cars. Used via the SchedulingService to actually assign a car.
+ */
 export class BookingService {
-    public storage: Storage = StorageInstance;
+    public storage: IStorageService;
+    constructor(storage: IStorageService) {
+        this.storage = storage;
+    }
+
+    /**
+     * Add a new demand to the store
+     * @param demand
+     */
     public addDemand(demand: Demand) {
-        if (userService.getUserFromId(demand.userId)) {
+        if (registry.getUserService().getUserFromId(demand.userId)) {
             demand.id = this.storage.getNextId();
             this.storage.getDemands().push(demand);
         } else {
@@ -18,6 +29,10 @@ export class BookingService {
         }
     }
 
+    /**
+     * Remove a demand from store
+     * @param demand
+     */
     public removeDemand(demand: Demand) {
         const found = this.storage.getDemands().find(demandItem => demandItem.id === demand.id);
         if (found) {
@@ -27,6 +42,11 @@ export class BookingService {
             throw (new Error('Demand not existing'));
         }
     }
+
+    /**
+     * Update a given demand in store
+     * @param demand
+     */
     public updateDemand(demand: Demand) {
         const foundDemand = this.storage.getDemands().find(demandItem => demandItem.id === demand.id);
         if (foundDemand) {
@@ -36,12 +56,18 @@ export class BookingService {
         }
     }
 
+    /**
+     * Get all demands assigned to a given user
+     * @param user
+     */
     public demandsForUser(user: User): Demand[] {
         return this.storage.getDemands().filter(demandItem => demandItem.userId === user.id);
     }
 
+    /**
+     * get all demands
+     */
     public demands(): Demand[] {
         return this.storage.getDemands();
     }
 }
-export const bookingService = new BookingService();

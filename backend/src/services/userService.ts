@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
 
-import { Storage, StorageInstance } from './storage';
+import { IStorageService } from './storage';
 
-import { bookingService } from './bookingService';
+import { registry } from './registry';
 
 import { User } from '../models/user';
 
@@ -10,17 +10,30 @@ import { User } from '../models/user';
  * Userservice for handling adding/remoping/updating users
  */
 export class UserService {
-    public storage: Storage = StorageInstance;
+    public storage: IStorageService;
+
+    constructor(storage: IStorageService) {
+        this.storage = storage;
+    }
+
+    /**
+     * Add a User to the store
+     * @param user
+     */
     public addUser(user: User): User {
         user.id = this.storage.getNextId();
         this.storage.getUser().push(user);
         return user;
     }
 
+    /**
+     * Remove User from store - only if user has no bookings on associated with.
+     * @param user
+     */
     public removeUser(user: User) {
         const found = this.storage.getUser().find(userItem => userItem.id === user.id);
         if (found) {
-            if (bookingService.demandsForUser(user).length > 0) {
+            if (registry.getBookingService().demandsForUser(user).length > 0) {
                 throw (new Error('User has bookings, could not be removed'));
             }
             const userIndex = this.storage.getUser().indexOf(found);
@@ -30,6 +43,11 @@ export class UserService {
             throw (new Error('User not existing'));
         }
     }
+
+    /**
+     * Update User from store
+     * @param user
+     */
     public updateUser(user: User) {
         const foundUser = this.storage.getUser().find(userItem => userItem.id === user.id);
         if (foundUser) {
@@ -39,14 +57,19 @@ export class UserService {
         }
     }
 
+    /**
+     * Get User via id
+     * @param userId
+     */
     public getUserFromId(userId: string): User | undefined {
         return this.storage.getUser().find(userItem => userItem.id === userId);
     }
 
+    /**
+     * get all users
+     */
     public users(): User[] {
         return this.storage.getUser();
     }
 
 }
-
-export const userService = new UserService();

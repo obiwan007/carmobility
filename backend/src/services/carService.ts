@@ -3,13 +3,17 @@ import * as _ from 'lodash';
 import { Car } from '../models/car';
 import { Location } from '../models/location';
 
-import { Storage, StorageInstance } from './storage';
+import { IStorageService } from './storage';
 
 /**
  * CarService class for handling all requests related to cars.
  */
 export class CarService {
-    private storage: Storage = StorageInstance;
+    public storage: IStorageService;
+
+    constructor(storage: IStorageService) {
+        this.storage = storage;
+    }
     /**
      * Add a new car to the pool. The id will be generated.
      * @param car
@@ -75,4 +79,3 @@ export class CarService {
         return this.storage.getCars();
     }
 }
-export const carService = new CarService();

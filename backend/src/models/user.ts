@@ -1,5 +1,5 @@
 /**
- * Enumberation of gender informations
+ * Enumeration of gender informations
  */
 enum Sex {
     male,
